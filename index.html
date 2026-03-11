@@ -4,15 +4,20 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NexaStore Command Center</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-  <style>* { box-sizing: border-box; margin: 0; padding: 0; }</style>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #06101C; }
+    #loading { display:flex; align-items:center; justify-content:center; height:100vh; background:#06101C; color:#63B3ED; font-family:Georgia,serif; font-size:18px; }
+  </style>
 </head>
 <body>
+  <div id="loading">⚡ Loading NexaStore Command Center...</div>
   <div id="root"></div>
   <script type="text/babel">
-
+    const { useState, useEffect, useRef } = React;
 
 const CHARACTERS = [
   { id: "char_offermaxai", appName: "OfferMaxAI", name: "Alex", persona: "Sharp professional in business attire, modern office background", vibe: "Confident, authoritative, results-driven", color: "#00D68F", avatar: "💼", status: "active" },
@@ -604,7 +609,7 @@ export default function CommandCenter() {
     </div>
   );
 }
-
+    document.getElementById('loading').style.display = 'none';
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<CommandCenter />);
   </script>
