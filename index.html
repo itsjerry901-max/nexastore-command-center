@@ -1,11 +1,612 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NexaStore Command Center</title>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NexaStore Command Center</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>* { box-sizing: border-box; margin: 0; padding: 0; }</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+
+
+const CHARACTERS = [
+  { id: "char_offermaxai", appName: "OfferMaxAI", name: "Alex", persona: "Sharp professional in business attire, modern office background", vibe: "Confident, authoritative, results-driven", color: "#00D68F", avatar: "💼", status: "active" },
+  { id: "char_icebreakerai", appName: "IcebreakerAI", name: "Jordan", persona: "Friendly outgoing person at a social event or coffee shop", vibe: "Warm, fun, relatable, energetic", color: "#FF6B6B", avatar: "😄", status: "active" },
+  { id: "char_snapmeal", appName: "SnapMeal", name: "Casey", persona: "Fit active person standing in a bright modern kitchen", vibe: "Energetic, healthy, practical", color: "#A8E6CF", avatar: "🥗", status: "pending" },
+  { id: "char_bedtimeai", appName: "BedtimeAI", name: "Morgan", persona: "Calm tired parent at home, soft evening lighting", vibe: "Exhausted but relieved, warm and real", color: "#B8B8FF", avatar: "🌙", status: "pending" },
+  { id: "char_redflagai", appName: "RedFlagAI", name: "Riley", persona: "Empowered woman speaking directly to camera, natural setting", vibe: "Honest, emotional, raw, protective", color: "#FF4757", avatar: "🚩", status: "pending" },
+  { id: "char_hookwriter", appName: "HookWriter", name: "Sam", persona: "Content creator at a professional desk setup with ring light", vibe: "Creative, hyped, knowledgeable", color: "#FF9F43", avatar: "🎬", status: "pending" },
+];
+
+const QUEUE = [
+  { id: "s1", appName: "OfferMaxAI", charId: "char_offermaxai", type: "TikTok Video", platform: "tiktok", status: "video_ready", scheduledFor: "Today 6:00 PM", videoProgress: 100, videoStatus: "ready", hook: "I asked AI to negotiate my salary and got $18,000 more", script: `HOOK (0-3s):\nI asked AI to negotiate my salary and got $18,000 more in 10 minutes.\n\nPROBLEM (3-18s):\nMost people accept the first offer they get. The average person leaves $12,000 on the table every single time they change jobs. Not because they cannot negotiate. Because they do not know how.\n\nSOLUTION (18-38s):\nOfferMaxAI analyzes your offer against real market data. It gives you the exact counter offer number, a word for word email to send, and a phone script for when they call back.\n\nPROOF (38-48s):\nUsers report $12,000 to $18,000 more per negotiation. One user got $31,000 more on a single offer.\n\nCTA (48-53s):\nFree to try. Link in bio. Takes 2 minutes.` },
+  { id: "s2", appName: "IcebreakerAI", charId: "char_icebreakerai", type: "TikTok Video", platform: "tiktok", status: "pending_script", scheduledFor: "Tomorrow 6:00 PM", videoProgress: 0, videoStatus: null, hook: "I froze up talking to my crush for 3 years straight", script: `HOOK (0-3s):\nI froze up talking to my crush for 3 years straight. So I built an AI to fix it.\n\nPROBLEM (3-18s):\nConversation anxiety is real. You see someone you want to talk to and your brain goes completely blank. You rehearse what to say in your head but nothing comes out right.\n\nSOLUTION (18-38s):\nIcebreakerAI generates 3 natural conversation starters based on your exact situation. First date, networking event, dating app match, party. Pick your situation, pick your vibe, get 3 lines that actually work with follow ups included.\n\nPROOF (38-48s):\nThousands of people using it. One user said it saved their networking career. Another said it got them a second date they never would have asked for.\n\nCTA (48-53s):\n3 free generations. Link in bio.` },
+  { id: "s3", appName: "OfferMaxAI", charId: "char_offermaxai", type: "X Thread", platform: "twitter", status: "pending_script", scheduledFor: "Tomorrow 9:00 AM", videoProgress: 0, videoStatus: null, hook: "I accepted the first salary offer I got at my last job.", script: `1/ I accepted the first salary offer I got at my last job.\n\nI found out 6 months later my colleague was making $22,000 more. Same job. Same experience.\n\nHere is what I wish I had known.\n\n2/ Most hiring managers expect you to negotiate. The first number is almost never their best. They build in room to move. You just have to ask.\n\n3/ The problem is most people freeze. They do not know what to ask for. They do not know what to say when the recruiter pushes back. So they say yes.\n\n4/ I built OfferMaxAI to fix this. Enter your offer. It tells you what the market pays. Then gives you the exact counter offer number.\n\n5/ It writes the email for you. Word for word. Professional. Confident. Based on real data.\n\n6/ It gives you the phone script too. For when they call back and say this is our best offer. You will know exactly what to say.\n\n7/ One user got $31,000 more on a single offer. The average is $14,000 extra.\n\n8/ Free at the link in my bio. $5 a month after. One negotiation pays for it a thousand times over.` },
+  { id: "s4", appName: "OfferMaxAI", charId: "char_offermaxai", type: "Email — Day 0", platform: "email", status: "approved", scheduledFor: "Sends on signup", videoProgress: 0, videoStatus: null, hook: "Welcome — here is your first win in 5 minutes", script: `Subject: You just made the smartest move of your job search\nPreview: Here is your quick win — takes 2 minutes\n\nWelcome to OfferMaxAI.\n\nHere is your quick win for today:\n\nRun your current offer through the analyzer right now. Even if you already accepted it, this tells you exactly what you are worth — so you are armed for your next negotiation.\n\nTakes 2 minutes. You will know your market value before you finish reading this.\n\nMore coming in 2 days.\n\n— The OfferMaxAI Team` },
+];
+
+const APPS = [
+  { name: "OfferMaxAI", status: "live", mrr: 0, users: 0, color: "#00D68F", domain: "offermaxai.com" },
+  { name: "IcebreakerAI", status: "live", mrr: 0, users: 0, color: "#FF6B6B", domain: "icebreakerai.com" },
+  { name: "SnapMeal", status: "building", mrr: 0, users: 0, color: "#A8E6CF", domain: "—" },
+  { name: "BedtimeAI", status: "planned", mrr: 0, users: 0, color: "#B8B8FF", domain: "—" },
+  { name: "RedFlagAI", status: "planned", mrr: 0, users: 0, color: "#FF4757", domain: "—" },
+];
+
+const pIcon = { tiktok: "🎵", twitter: "🐦", email: "📧", instagram: "📸" };
+const pColor = { tiktok: "#FF0050", twitter: "#1D9BF0", email: "#00D68F", instagram: "#E1306C" };
+
+const STATUS = {
+  pending_script:  { label: "Awaiting Script Approval", color: "#FF4757",  icon: "📝" },
+  script_approved: { label: "Generating in Higgsfield", color: "#FF9F43",  icon: "⚡" },
+  video_ready:     { label: "Video Ready for Review",   color: "#63B3ED",  icon: "🎬" },
+  approved:        { label: "Approved — In Buffer",     color: "#00D68F",  icon: "✅" },
+  rejected:        { label: "Rejected",                 color: "#4A6080",  icon: "✕"  },
+};
+
+export default function CommandCenter() {
+  const [tab, setTab] = useState("queue");
+  const [queue, setQueue] = useState(QUEUE);
+  const [chars, setChars] = useState(CHARACTERS);
+  const [selected, setSelected] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [filter, setFilter] = useState("all");
+  const [toast, setToast] = useState(null);
+  const [charModal, setCharModal] = useState(false);
+  const [newChar, setNewChar] = useState({ appName: "", name: "", persona: "", vibe: "" });
+  const [mounted, setMounted] = useState(false);
+  const timers = useRef({});
+
+  useEffect(() => { setTimeout(() => setMounted(true), 80); }, []);
+
+  // Simulate Higgsfield progress
+  useEffect(() => {
+    queue.filter(i => i.videoStatus === "generating").forEach(item => {
+      if (timers.current[item.id]) return;
+      timers.current[item.id] = setInterval(() => {
+        setQueue(q => q.map(qi => {
+          if (qi.id !== item.id) return qi;
+          const p = Math.min(qi.videoProgress + Math.random() * 4, 100);
+          if (p >= 100) {
+            clearInterval(timers.current[item.id]);
+            showToast(`🎬 ${qi.appName} video is ready for your review!`);
+            return { ...qi, videoProgress: 100, videoStatus: "ready", status: "video_ready" };
+          }
+          return { ...qi, videoProgress: p };
+        }));
+      }, 700);
+    });
+    return () => Object.values(timers.current).forEach(clearInterval);
+  }, [queue]);
+
+  const showToast = (msg, type = "success") => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const approveScript = (id) => {
+    const item = queue.find(i => i.id === id);
+    setQueue(q => q.map(i => i.id !== id ? i : {
+      ...i,
+      script: editing ? editText : i.script,
+      status: i.platform === "tiktok" || i.platform === "instagram" ? "script_approved" : "approved",
+      videoStatus: i.platform === "tiktok" || i.platform === "instagram" ? "generating" : null,
+      videoProgress: 0,
+    }));
+    setSelected(null); setEditing(false);
+    if (item?.platform === "tiktok") showToast("✅ Script approved! Sending to Higgsfield to generate video...");
+    else showToast("✅ Approved and queued for posting!");
+  };
+
+  const approveVideo = (id) => {
+    setQueue(q => q.map(i => i.id !== id ? i : { ...i, status: "approved", videoStatus: "approved" }));
+    setSelected(null);
+    showToast("🚀 Video approved! Added to Buffer queue.");
+  };
+
+  const reject = (id) => {
+    setQueue(q => q.map(i => i.id !== id ? i : { ...i, status: "rejected" }));
+    setSelected(null); setEditing(false);
+    showToast("❌ Rejected — Claude will regenerate.", "error");
+  };
+
+  const open = (item) => { setSelected(item); setEditText(item.script); setEditing(false); };
+
+  const generating = queue.filter(i => i.videoStatus === "generating");
+  const pendingScripts = queue.filter(i => i.status === "pending_script");
+  const videosReady = queue.filter(i => i.status === "video_ready");
+  const approved = queue.filter(i => i.status === "approved");
+  const totalAlerts = pendingScripts.length + videosReady.length;
+
+  const filtered = filter === "all" ? queue
+    : filter === "scripts" ? queue.filter(i => i.status === "pending_script")
+    : filter === "videos" ? queue.filter(i => ["script_approved","video_ready"].includes(i.status) || i.videoStatus === "generating")
+    : filter === "approved" ? approved
+    : queue.filter(i => i.status === "rejected");
+
+  const inp = { width: "100%", background: "#0A1929", border: "1px solid #4A7FA5", borderRadius: 8, padding: "10px 14px", color: "#E2EAF4", fontFamily: "Georgia, serif", fontSize: 12, outline: "none", boxSizing: "border-box" };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#06101C", fontFamily: "Georgia, serif", color: "#E2EAF4", opacity: mounted ? 1 : 0, transition: "opacity 0.35s" }}>
+      {/* Grid */}
+      <div style={{ position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(99,179,237,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(99,179,237,0.02) 1px,transparent 1px)", backgroundSize: "48px 48px", pointerEvents: "none", zIndex: 0 }} />
+
+      {/* Toast */}
+      {toast && <div style={{ position: "fixed", top: 18, right: 18, zIndex: 300, background: toast.type === "success" ? "#00D68F14" : "#FF475714", border: `1px solid ${toast.type === "success" ? "#00D68F" : "#FF4757"}`, color: toast.type === "success" ? "#00D68F" : "#FF4757", borderRadius: 12, padding: "11px 20px", fontSize: 13, fontWeight: "bold", backdropFilter: "blur(20px)", animation: "slideIn .3s ease", maxWidth: 380, zIndex: 999 }}>{toast.msg}</div>}
+
+      {/* New Character Modal */}
+      {charModal && (
+        <div onClick={() => setCharModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(16px)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: "#0D1F38", border: "1px solid rgba(99,179,237,0.2)", borderRadius: 20, padding: "28px 32px", width: "100%", maxWidth: 460, animation: "popIn .25s ease" }}>
+            <div style={{ fontSize: 17, fontWeight: "bold", color: "#fff", marginBottom: 4 }}>New Higgsfield Character</div>
+            <div style={{ fontSize: 11, color: "#4A6080", marginBottom: 22 }}>This becomes the AI spokesperson face for that app across all videos</div>
+            {[["appName","App Name","e.g. SnapMeal"],["name","Character Name","e.g. Casey"],["persona","Visual Persona (use in Higgsfield)","e.g. Fit person standing in a bright modern kitchen"],["vibe","Personality Vibe","e.g. Energetic, healthy, practical"]].map(([f,l,ph]) => (
+              <div key={f} style={{ marginBottom: 14 }}>
+                <div style={{ fontSize: 9, color: "#4A6080", letterSpacing: 2, marginBottom: 5 }}>{l.toUpperCase()}</div>
+                <input style={inp} placeholder={ph} value={newChar[f]} onChange={e => setNewChar(c => ({...c,[f]:e.target.value}))} />
+              </div>
+            ))}
+            <div style={{ display: "flex", gap: 10, marginTop: 6 }}>
+              <button onClick={() => { setChars(c => [...c, { id:"char_"+Date.now(), ...newChar, color:"#63B3ED", avatar:"🤖", status:"active" }]); setCharModal(false); setNewChar({appName:"",name:"",persona:"",vibe:""}); showToast(`✅ ${newChar.name} created!`); }} disabled={!newChar.appName||!newChar.name} style={{ flex:2, background:"linear-gradient(135deg,#0066FF,#00D68F)", border:"none", borderRadius:10, padding:"12px", cursor:"pointer", color:"#fff", fontWeight:"bold", fontSize:13, fontFamily:"Georgia,serif" }}>Create Character</button>
+              <button onClick={() => setCharModal(false)} style={{ flex:1, background:"transparent", border:"1px solid #4A7FA5", borderRadius:10, padding:"12px", cursor:"pointer", color:"#4A6080", fontFamily:"Georgia,serif", fontSize:12 }}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Header */}
+      <div style={{ height: 62, borderBottom: "1px solid rgba(99,179,237,0.07)", padding: "0 26px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50, background: "rgba(6,16,28,0.93)", backdropFilter: "blur(20px)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: "linear-gradient(135deg,#0066FF,#00D68F)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, boxShadow: "0 0 18px rgba(0,102,255,0.28)" }}>⚡</div>
+          <div>
+            <div style={{ fontSize: 17, fontWeight: "bold", color: "#fff" }}>NexaStore <span style={{ background: "linear-gradient(135deg,#63B3ED,#00D68F)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Command Center</span></div>
+            <div style={{ fontSize: 9, color: "#4A7FA5", letterSpacing: 3 }}>OVERSEER · HIGGSFIELD · BUFFER · N8N</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          {generating.length > 0 && <div style={{ background: "#FF9F4318", border: "1px solid #FF9F4344", borderRadius: 20, padding: "4px 14px", fontSize: 11, color: "#FF9F43", fontWeight: "bold" }}>⚡ {generating.length} video{generating.length>1?"s":""} generating</div>}
+          {totalAlerts > 0 && <div style={{ background: "#FF475718", border: "1px solid #FF475744", borderRadius: 20, padding: "4px 14px", fontSize: 11, color: "#FF4757", fontWeight: "bold", animation: "pulse 2s infinite" }}>🔔 {totalAlerts} need approval</div>}
+          <div style={{ fontSize: 11, color: "#5A8AAA" }}>Overseer: <span style={{ color: "#00D68F" }}>● Active</span></div>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "210px 1fr", minHeight: "calc(100vh - 62px)", position: "relative", zIndex: 1 }}>
+
+        {/* Sidebar */}
+        <div style={{ borderRight: "1px solid rgba(99,179,237,0.06)", padding: "18px 12px", background: "rgba(6,16,28,0.5)", overflowY: "auto" }}>
+          {[
+            ["queue","Approval Queue","📋",totalAlerts],
+            ["videos","Video Studio","🎬",videosReady.length+generating.length],
+            ["characters","AI Characters","🤖",null],
+            ["schedule","Post Schedule","📅",approved.length],
+            ["pipeline","App Pipeline","🔄",null],
+            ["analytics","Analytics","📊",null],
+            ["apikeys","API Keys","🔑",null],
+          ].map(([id,label,icon,badge]) => (
+            <button key={id} onClick={() => setTab(id)} style={{ width:"100%", background:tab===id?"rgba(99,179,237,0.07)":"transparent", border:tab===id?"1px solid rgba(99,179,237,0.14)":"1px solid transparent", borderRadius:9, padding:"9px 11px", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:3, transition:"all .2s" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                <span style={{ fontSize:13 }}>{icon}</span>
+                <span style={{ fontSize:11, color:tab===id?"#63B3ED":"#6A8BAE", fontWeight:tab===id?"bold":"normal" }}>{label}</span>
+              </div>
+              {badge > 0 && <span style={{ background:"#FF4757", color:"#fff", borderRadius:99, fontSize:9, padding:"1px 6px", fontWeight:"bold" }}>{badge}</span>}
+            </button>
+          ))}
+
+          <div style={{ marginTop: 20, background:"rgba(0,214,143,0.05)", border:"1px solid rgba(0,214,143,0.1)", borderRadius:12, padding:"13px" }}>
+            <div style={{ fontSize:9, color:"#00D68F", letterSpacing:2, marginBottom:5 }}>TOTAL MRR</div>
+            <div style={{ fontSize:26, fontWeight:"bold", color:"#00D68F" }}>$0</div>
+            <div style={{ marginTop:8, height:3, background:"rgba(0,214,143,0.1)", borderRadius:99 }}><div style={{ height:"100%", width:"0%", background:"#00D68F", borderRadius:99 }} /></div>
+            <div style={{ fontSize:9, color:"#4A7FA5", marginTop:4 }}>$0 / $1,000 goal</div>
+          </div>
+
+          <div style={{ marginTop:10, background:"rgba(255,159,67,0.05)", border:"1px solid rgba(255,159,67,0.12)", borderRadius:12, padding:"13px" }}>
+            <div style={{ fontSize:9, color:"#FF9F43", letterSpacing:2, marginBottom:6 }}>HIGGSFIELD</div>
+            {generating.length > 0 ? (
+              <>
+                <div style={{ fontSize:11, color:"#FFD93D", fontWeight:"bold", marginBottom:8 }}>⚡ {generating.length} generating</div>
+                {generating.map(item => (
+                  <div key={item.id} style={{ marginBottom:8 }}>
+                    <div style={{ fontSize:10, color:"#6A8BAE", marginBottom:3 }}>{item.appName}</div>
+                    <div style={{ height:4, background:"rgba(255,159,67,0.12)", borderRadius:99 }}>
+                      <div style={{ height:"100%", width:`${item.videoProgress}%`, background:"linear-gradient(90deg,#FF9F43,#FFD93D)", borderRadius:99, transition:"width .5s" }} />
+                    </div>
+                    <div style={{ fontSize:9, color:"#FF9F43", marginTop:2 }}>{Math.round(item.videoProgress)}%</div>
+                  </div>
+                ))}
+              </>
+            ) : <div style={{ fontSize:11, color:"#00D68F" }}>● Connected</div>}
+          </div>
+        </div>
+
+        {/* Main */}
+        <div style={{ padding:"22px", overflowY:"auto" }}>
+
+          {/* ── APPROVAL QUEUE ── */}
+          {tab === "queue" && (
+            <div>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16 }}>
+                <div>
+                  <div style={{ fontSize:19, fontWeight:"bold", color:"#fff", marginBottom:4 }}>Approval Queue</div>
+                  <div style={{ fontSize:11, color:"#4A6080" }}>Approve script → Higgsfield generates video → Approve video → Buffer posts it</div>
+                </div>
+                <div style={{ display:"flex", gap:5 }}>
+                  {["all","scripts","videos","approved","rejected"].map(f => (
+                    <button key={f} onClick={() => setFilter(f)} style={{ background:filter===f?"rgba(99,179,237,0.1)":"transparent", border:`1px solid ${filter===f?"rgba(99,179,237,0.3)":"rgba(99,179,237,0.07)"}`, borderRadius:7, padding:"4px 11px", cursor:"pointer", color:filter===f?"#63B3ED":"#4A6080", fontSize:10, fontFamily:"Georgia,serif", fontWeight:filter===f?"bold":"normal" }}>
+                      {f.charAt(0).toUpperCase()+f.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Pipeline flow indicator */}
+              <div style={{ display:"flex", gap:5, marginBottom:18, flexWrap:"wrap" }}>
+                {Object.entries(STATUS).map(([k,v]) => (
+                  <div key={k} style={{ background:v.color+"10", border:`1px solid ${v.color}28`, borderRadius:99, padding:"3px 11px", fontSize:9, color:v.color, fontWeight:"bold" }}>{v.icon} {v.label}</div>
+                ))}
+              </div>
+
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:12 }}>
+                {filtered.map(item => {
+                  const s = STATUS[item.status] || STATUS.pending_script;
+                  const char = chars.find(c => c.id === item.charId);
+                  return (
+                    <div key={item.id} onClick={() => open(item)} style={{ background:selected?.id===item.id?"rgba(99,179,237,0.06)":"rgba(255,255,255,0.02)", border:`1px solid ${selected?.id===item.id?"rgba(99,179,237,0.22)":s.color+"20"}`, borderRadius:13, overflow:"hidden", cursor:"pointer", transition:"all .2s" }}>
+                      <div style={{ height:2, background:s.color }} />
+                      <div style={{ padding:"15px 16px" }}>
+                        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:9 }}>
+                          <div style={{ display:"flex", gap:9, alignItems:"center" }}>
+                            <span style={{ fontSize:17 }}>{pIcon[item.platform]}</span>
+                            <div>
+                              <div style={{ fontSize:12, fontWeight:"bold", color:"#fff" }}>{item.appName}</div>
+                              <div style={{ fontSize:10, color:pColor[item.platform] }}>{item.type}</div>
+                            </div>
+                          </div>
+                          <div style={{ background:s.color+"15", color:s.color, border:`1px solid ${s.color}30`, borderRadius:99, fontSize:9, padding:"2px 8px", fontWeight:"bold" }}>{s.icon} {s.label}</div>
+                        </div>
+
+                        {char && (
+                          <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.05)", borderRadius:8, padding:"6px 10px", marginBottom:9, display:"flex", gap:8, alignItems:"center" }}>
+                            <span style={{ fontSize:14 }}>{char.avatar}</span>
+                            <div>
+                              <div style={{ fontSize:10, color:char.color, fontWeight:"bold" }}>{char.name} — Higgsfield Character</div>
+                              <div style={{ fontSize:9, color:"#5A8AAA" }}>{char.persona.slice(0,44)}...</div>
+                            </div>
+                          </div>
+                        )}
+
+                        <div style={{ fontSize:11, color:"#6A8BAE", lineHeight:1.5, marginBottom:9, overflow:"hidden", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" }}>"{item.hook}"</div>
+
+                        {item.videoStatus === "generating" && (
+                          <div style={{ marginBottom:9 }}>
+                            <div style={{ display:"flex", justifyContent:"space-between", fontSize:9, color:"#FF9F43", marginBottom:3 }}><span>⚡ Higgsfield generating...</span><span>{Math.round(item.videoProgress)}%</span></div>
+                            <div style={{ height:4, background:"rgba(255,159,67,0.12)", borderRadius:99 }}><div style={{ height:"100%", width:`${item.videoProgress}%`, background:"linear-gradient(90deg,#FF9F43,#FFD93D)", borderRadius:99, transition:"width .5s" }} /></div>
+                          </div>
+                        )}
+
+                        <div style={{ fontSize:10, color:"#4A7FA5", marginBottom:10 }}>📅 {item.scheduledFor}</div>
+
+                        {item.status === "pending_script" && (
+                          <div style={{ display:"flex", gap:5 }}>
+                            <button onClick={e=>{e.stopPropagation();open(item);setEditing(true);}} style={{ flex:1, background:"rgba(99,179,237,0.08)", border:"1px solid rgba(99,179,237,0.18)", borderRadius:7, padding:"6px", cursor:"pointer", color:"#63B3ED", fontSize:10, fontFamily:"Georgia,serif" }}>✏️ Edit</button>
+                            <button onClick={e=>{e.stopPropagation();approveScript(item.id);}} style={{ flex:2, background:"rgba(0,214,143,0.1)", border:"1px solid rgba(0,214,143,0.22)", borderRadius:7, padding:"6px", cursor:"pointer", color:"#00D68F", fontSize:10, fontFamily:"Georgia,serif", fontWeight:"bold" }}>✓ Approve Script</button>
+                            <button onClick={e=>{e.stopPropagation();reject(item.id);}} style={{ background:"rgba(255,71,87,0.07)", border:"1px solid rgba(255,71,87,0.14)", borderRadius:7, padding:"6px 10px", cursor:"pointer", color:"#FF4757", fontSize:10, fontFamily:"Georgia,serif" }}>✕</button>
+                          </div>
+                        )}
+                        {item.status === "video_ready" && (
+                          <div style={{ display:"flex", gap:5 }}>
+                            <button onClick={e=>{e.stopPropagation();open(item);}} style={{ flex:1, background:"rgba(99,179,237,0.08)", border:"1px solid rgba(99,179,237,0.18)", borderRadius:7, padding:"6px", cursor:"pointer", color:"#63B3ED", fontSize:10, fontFamily:"Georgia,serif" }}>▶ Watch</button>
+                            <button onClick={e=>{e.stopPropagation();approveVideo(item.id);}} style={{ flex:2, background:"rgba(255,159,67,0.1)", border:"1px solid rgba(255,159,67,0.22)", borderRadius:7, padding:"6px", cursor:"pointer", color:"#FF9F43", fontSize:10, fontFamily:"Georgia,serif", fontWeight:"bold" }}>🚀 Approve Video</button>
+                            <button onClick={e=>{e.stopPropagation();reject(item.id);}} style={{ background:"rgba(255,71,87,0.07)", border:"1px solid rgba(255,71,87,0.14)", borderRadius:7, padding:"6px 10px", cursor:"pointer", color:"#FF4757", fontSize:10, fontFamily:"Georgia,serif" }}>✕</button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Detail panel */}
+              {selected && (
+                <div style={{ marginTop:18, background:"rgba(255,255,255,0.02)", border:"1px solid rgba(99,179,237,0.1)", borderRadius:15, padding:"20px" }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
+                    <div style={{ fontSize:15, fontWeight:"bold", color:"#fff" }}>{pIcon[selected.platform]} {selected.appName} — {selected.type}</div>
+                    <div style={{ display:"flex", gap:7 }}>
+                      {selected.status === "pending_script" && <button onClick={() => setEditing(!editing)} style={{ background:"rgba(99,179,237,0.07)", border:"1px solid rgba(99,179,237,0.14)", borderRadius:7, padding:"5px 13px", cursor:"pointer", color:"#63B3ED", fontSize:11, fontFamily:"Georgia,serif" }}>{editing?"👁 Preview":"✏️ Edit Script"}</button>}
+                      <button onClick={() => {setSelected(null);setEditing(false);}} style={{ background:"transparent", border:"none", color:"#4A6080", cursor:"pointer", fontSize:20, lineHeight:1 }}>×</button>
+                    </div>
+                  </div>
+
+                  {selected.status === "video_ready" && (
+                    <div style={{ background:"rgba(255,159,67,0.05)", border:"1px solid rgba(255,159,67,0.15)", borderRadius:12, padding:"20px", marginBottom:14, textAlign:"center" }}>
+                      <div style={{ fontSize:38, marginBottom:10 }}>🎬</div>
+                      <div style={{ fontSize:14, fontWeight:"bold", color:"#FF9F43", marginBottom:5 }}>Your Higgsfield Video is Ready</div>
+                      <div style={{ fontSize:11, color:"#4A6080", marginBottom:14 }}>Watch the full video in Higgsfield, then come back and approve or reject it below.</div>
+                      <a href="https://higgsfield.ai" target="_blank" rel="noreferrer" style={{ textDecoration:"none" }}>
+                        <button style={{ background:"linear-gradient(135deg,#FF9F43,#FFD93D)", border:"none", borderRadius:9, padding:"10px 22px", cursor:"pointer", color:"#000", fontWeight:"bold", fontSize:12, fontFamily:"Georgia,serif" }}>▶ Watch in Higgsfield →</button>
+                      </a>
+                    </div>
+                  )}
+
+                  {editing
+                    ? <textarea value={editText} onChange={e=>setEditText(e.target.value)} style={{ ...inp, minHeight:240, resize:"vertical", lineHeight:1.8, fontFamily:"Courier New,monospace" }} />
+                    : <pre style={{ whiteSpace:"pre-wrap", fontFamily:"Courier New,monospace", fontSize:11, color:"#8BA8C4", lineHeight:1.9, background:"#0A1929", borderRadius:10, padding:"15px", margin:0 }}>{editText}</pre>
+                  }
+
+                  <div style={{ display:"flex", gap:9, marginTop:14 }}>
+                    {selected.status === "pending_script" && <>
+                      <button onClick={() => approveScript(selected.id)} style={{ flex:2, background:"linear-gradient(135deg,#00D68F,#0066FF)", border:"none", borderRadius:9, padding:"12px", cursor:"pointer", color:"#fff", fontWeight:"bold", fontSize:13, fontFamily:"Georgia,serif", boxShadow:"0 4px 14px rgba(0,214,143,0.22)" }}>
+                        ✓ Approve Script — Send to Higgsfield
+                      </button>
+                      <button onClick={() => reject(selected.id)} style={{ flex:1, background:"rgba(255,71,87,0.07)", border:"1px solid rgba(255,71,87,0.18)", borderRadius:9, padding:"12px", cursor:"pointer", color:"#FF4757", fontSize:12, fontFamily:"Georgia,serif" }}>✕ Reject</button>
+                    </>}
+                    {selected.status === "video_ready" && <>
+                      <button onClick={() => approveVideo(selected.id)} style={{ flex:2, background:"linear-gradient(135deg,#FF9F43,#00D68F)", border:"none", borderRadius:9, padding:"12px", cursor:"pointer", color:"#000", fontWeight:"bold", fontSize:13, fontFamily:"Georgia,serif", boxShadow:"0 4px 14px rgba(255,159,67,0.22)" }}>
+                        🚀 Approve Video — Add to Buffer Queue
+                      </button>
+                      <button onClick={() => reject(selected.id)} style={{ flex:1, background:"rgba(255,71,87,0.07)", border:"1px solid rgba(255,71,87,0.18)", borderRadius:9, padding:"12px", cursor:"pointer", color:"#FF4757", fontSize:12, fontFamily:"Georgia,serif" }}>✕ Reject</button>
+                    </>}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── VIDEO STUDIO ── */}
+          {tab === "videos" && (
+            <div>
+              <div style={{ fontSize:19, fontWeight:"bold", color:"#fff", marginBottom:4 }}>Video Studio</div>
+              <div style={{ fontSize:11, color:"#4A6080", marginBottom:20 }}>All Higgsfield AI video jobs across every app</div>
+
+              <div style={{ background:"rgba(255,159,67,0.04)", border:"1px solid rgba(255,159,67,0.1)", borderRadius:12, padding:"14px 18px", marginBottom:20 }}>
+                <div style={{ fontSize:10, color:"#FF9F43", letterSpacing:2, fontWeight:"bold", marginBottom:10 }}>THE HIGGSFIELD WORKFLOW</div>
+                <div style={{ display:"flex", gap:6, flexWrap:"wrap", alignItems:"center" }}>
+                  {["📝 Claude writes script","✅ You approve it","⚡ Higgsfield generates video","🎬 You review video","🚀 Buffer posts it"].map((step,i,arr) => (
+                    <div key={i} style={{ display:"flex", alignItems:"center", gap:6 }}>
+                      <div style={{ background:"rgba(255,159,67,0.08)", border:"1px solid rgba(255,159,67,0.18)", borderRadius:7, padding:"5px 11px", fontSize:11, color:"#FF9F43" }}>{step}</div>
+                      {i<arr.length-1 && <span style={{ color:"#4A7FA5", fontSize:14 }}>→</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:20 }}>
+                {[{label:"Generating",value:generating.length,color:"#FFD93D",icon:"⚡"},{label:"Ready for Review",value:videosReady.length,color:"#63B3ED",icon:"🎬"},{label:"Approved & Queued",value:queue.filter(i=>i.videoStatus==="approved").length,color:"#00D68F",icon:"✅"}].map(s => (
+                  <div key={s.label} style={{ background:s.color+"07", border:`1px solid ${s.color}18`, borderRadius:12, padding:"16px 18px" }}>
+                    <div style={{ fontSize:24, marginBottom:6 }}>{s.icon}</div>
+                    <div style={{ fontSize:26, fontWeight:"bold", color:s.color, marginBottom:3 }}>{s.value}</div>
+                    <div style={{ fontSize:11, color:"#4A6080" }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                {queue.filter(i=>i.videoStatus).map(item => {
+                  const char = chars.find(c => c.id === item.charId);
+                  return (
+                    <div key={item.id} style={{ background:"rgba(255,255,255,0.02)", border:"1px solid rgba(99,179,237,0.07)", borderRadius:12, padding:"14px 18px", display:"flex", alignItems:"center", gap:14 }}>
+                      <span style={{ fontSize:22 }}>{char?.avatar||"🎬"}</span>
+                      <div style={{ flex:1 }}>
+                        <div style={{ fontSize:13, fontWeight:"bold", color:"#fff", marginBottom:2 }}>{item.appName} — {item.type}</div>
+                        <div style={{ fontSize:11, color:"#4A6080" }}>"{item.hook.slice(0,55)}..."</div>
+                        {item.videoStatus === "generating" && (
+                          <div style={{ marginTop:8 }}>
+                            <div style={{ display:"flex", justifyContent:"space-between", fontSize:9, color:"#FF9F43", marginBottom:3 }}><span>Generating in Higgsfield...</span><span>{Math.round(item.videoProgress)}%</span></div>
+                            <div style={{ height:4, background:"rgba(255,159,67,0.1)", borderRadius:99 }}><div style={{ height:"100%", width:`${item.videoProgress}%`, background:"linear-gradient(90deg,#FF9F43,#FFD93D)", borderRadius:99, transition:"width .5s" }} /></div>
+                          </div>
+                        )}
+                      </div>
+                      {item.videoStatus === "ready" && <button onClick={() => approveVideo(item.id)} style={{ background:"linear-gradient(135deg,#FF9F43,#FFD93D)", border:"none", borderRadius:8, padding:"8px 16px", cursor:"pointer", color:"#000", fontWeight:"bold", fontSize:11, fontFamily:"Georgia,serif" }}>🚀 Approve</button>}
+                      {item.videoStatus === "approved" && <div style={{ background:"#00D68F14", color:"#00D68F", border:"1px solid #00D68F28", borderRadius:99, fontSize:10, padding:"3px 11px", fontWeight:"bold" }}>✅ In Buffer</div>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ── CHARACTERS ── */}
+          {tab === "characters" && (
+            <div>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:20 }}>
+                <div>
+                  <div style={{ fontSize:19, fontWeight:"bold", color:"#fff", marginBottom:4 }}>AI Characters</div>
+                  <div style={{ fontSize:11, color:"#4A6080" }}>Each app gets its own Higgsfield spokesperson. One face = instant brand recognition.</div>
+                </div>
+                <button onClick={() => setCharModal(true)} style={{ background:"linear-gradient(135deg,#FF9F43,#FFD93D)", border:"none", borderRadius:9, padding:"9px 18px", cursor:"pointer", color:"#000", fontWeight:"bold", fontSize:12, fontFamily:"Georgia,serif" }}>+ New Character</button>
+              </div>
+
+              <div style={{ background:"rgba(255,159,67,0.04)", border:"1px solid rgba(255,159,67,0.1)", borderRadius:11, padding:"13px 16px", marginBottom:18, fontSize:12, color:"#6A8BAE", lineHeight:1.7 }}>
+                💡 <strong style={{ color:"#FF9F43" }}>How to use:</strong> Go to higgsfield.ai → Create Character → paste the Persona description below → save the Character ID → add it to your n8n workflow so videos auto-generate with the right face every time.
+              </div>
+
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:14 }}>
+                {chars.map(char => (
+                  <div key={char.id} style={{ background:char.color+"07", border:`1px solid ${char.color}1E`, borderRadius:15, padding:"18px", position:"relative", overflow:"hidden" }}>
+                    <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:char.color }} />
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:12 }}>
+                      <div style={{ display:"flex", gap:11, alignItems:"center" }}>
+                        <div style={{ width:46, height:46, borderRadius:13, background:char.color+"18", border:`1px solid ${char.color}33`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:22 }}>{char.avatar}</div>
+                        <div>
+                          <div style={{ fontSize:16, fontWeight:"bold", color:"#fff" }}>{char.name}</div>
+                          <div style={{ fontSize:10, color:char.color, fontWeight:"bold" }}>{char.appName}</div>
+                        </div>
+                      </div>
+                      <div style={{ background:char.status==="active"?"#00D68F14":"#FFD93D14", color:char.status==="active"?"#00D68F":"#FFD93D", border:`1px solid ${char.status==="active"?"#00D68F2A":"#FFD93D2A"}`, borderRadius:99, fontSize:9, padding:"2px 8px", fontWeight:"bold" }}>
+                        {char.status==="active"?"● ACTIVE":"○ PENDING"}
+                      </div>
+                    </div>
+                    <div style={{ marginBottom:9 }}>
+                      <div style={{ fontSize:9, color:"#4A7FA5", letterSpacing:2, marginBottom:3 }}>VISUAL PERSONA (paste into Higgsfield)</div>
+                      <div style={{ fontSize:12, color:"#8BA8C4", lineHeight:1.5 }}>{char.persona}</div>
+                    </div>
+                    <div style={{ marginBottom:12 }}>
+                      <div style={{ fontSize:9, color:"#4A7FA5", letterSpacing:2, marginBottom:3 }}>PERSONALITY VIBE</div>
+                      <div style={{ fontSize:12, color:"#8BA8C4", fontStyle:"italic" }}>{char.vibe}</div>
+                    </div>
+                    <div style={{ background:"rgba(0,0,0,0.18)", borderRadius:8, padding:"7px 11px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <div>
+                        <div style={{ fontSize:9, color:"#4A7FA5", letterSpacing:2, marginBottom:2 }}>CHARACTER ID</div>
+                        <div style={{ fontSize:10, color:"#4A6080", fontFamily:"Courier New,monospace" }}>{char.id}</div>
+                      </div>
+                      <button onClick={() => { try{navigator.clipboard.writeText(char.id);}catch{} showToast("ID copied!"); }} style={{ background:char.color+"14", border:`1px solid ${char.color}28`, borderRadius:6, padding:"3px 9px", cursor:"pointer", color:char.color, fontSize:9, fontFamily:"Georgia,serif", fontWeight:"bold" }}>Copy</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── SCHEDULE ── */}
+          {tab === "schedule" && (
+            <div>
+              <div style={{ fontSize:19, fontWeight:"bold", color:"#fff", marginBottom:4 }}>Post Schedule</div>
+              <div style={{ fontSize:11, color:"#4A6080", marginBottom:20 }}>Approved content queued in Buffer. Anti-ban rules enforced automatically.</div>
+              {approved.length === 0
+                ? <div style={{ textAlign:"center", padding:"60px 20px", color:"#4A7FA5" }}><div style={{ fontSize:38, marginBottom:12 }}>📅</div><div style={{ marginBottom:6 }}>No approved content yet.</div><div style={{ fontSize:11 }}>Approve scripts in the queue → approve generated videos → they appear here.</div></div>
+                : <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                    {approved.map(item => (
+                      <div key={item.id} style={{ background:"rgba(0,214,143,0.03)", border:"1px solid rgba(0,214,143,0.1)", borderRadius:11, padding:"13px 17px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                        <div style={{ display:"flex", gap:11, alignItems:"center" }}>
+                          <span style={{ fontSize:18 }}>{pIcon[item.platform]}</span>
+                          <div>
+                            <div style={{ fontSize:13, fontWeight:"bold", color:"#fff" }}>{item.appName} — {item.type}</div>
+                            <div style={{ fontSize:11, color:"#4A6080" }}>"{item.hook.slice(0,55)}..."</div>
+                          </div>
+                        </div>
+                        <div style={{ textAlign:"right" }}>
+                          <div style={{ fontSize:12, color:"#00D68F", fontWeight:"bold" }}>{item.scheduledFor}</div>
+                          <div style={{ fontSize:10, color:"#4A7FA5" }}>In Buffer queue</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+              }
+            </div>
+          )}
+
+          {/* ── PIPELINE ── */}
+          {tab === "pipeline" && (
+            <div>
+              <div style={{ fontSize:19, fontWeight:"bold", color:"#fff", marginBottom:4 }}>App Pipeline</div>
+              <div style={{ fontSize:11, color:"#4A6080", marginBottom:20 }}>Every NexaStore app and its current stage</div>
+              <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                {APPS.map(app => (
+                  <div key={app.name} style={{ background:app.color+"06", border:`1px solid ${app.color}16`, borderRadius:13, padding:"15px 19px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                    <div style={{ display:"flex", gap:13, alignItems:"center" }}>
+                      <div style={{ width:42, height:42, borderRadius:11, background:app.color+"16", display:"flex", alignItems:"center", justifyContent:"center", fontSize:19 }}>{app.status==="live"?"✅":app.status==="building"?"🔨":"📋"}</div>
+                      <div>
+                        <div style={{ fontSize:14, fontWeight:"bold", color:"#fff" }}>{app.name}</div>
+                        <div style={{ fontSize:11, color:"#5A8AAA" }}>{app.domain}</div>
+                      </div>
+                    </div>
+                    <div style={{ display:"flex", gap:18, alignItems:"center" }}>
+                      <div style={{ textAlign:"right" }}>
+                        <div style={{ fontSize:17, fontWeight:"bold", color:app.color }}>${app.mrr}/mo</div>
+                        <div style={{ fontSize:10, color:"#4A7FA5" }}>{app.users} users</div>
+                      </div>
+                      <div style={{ background:app.color+"16", color:app.color, border:`1px solid ${app.color}2A`, borderRadius:99, fontSize:9, padding:"3px 10px", fontWeight:"bold" }}>{app.status.toUpperCase()}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── ANALYTICS ── */}
+          {tab === "analytics" && (
+            <div>
+              <div style={{ fontSize:19, fontWeight:"bold", color:"#fff", marginBottom:18 }}>Empire Analytics</div>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:20 }}>
+                {[{label:"Total MRR",value:"$0",sub:"Goal: $1,000/mo",color:"#00D68F"},{label:"Exit Valuation",value:"$0",sub:"At 10x ARR",color:"#FFD93D"},{label:"Apps Live",value:"2",sub:"of 32 planned",color:"#63B3ED"},{label:"Videos Generated",value:String(queue.filter(i=>i.videoStatus).length),sub:"By Higgsfield",color:"#FF9F43"},{label:"Posts Approved",value:String(approved.length),sub:"In Buffer queue",color:"#B8B8FF"},{label:"Conversion Rate",value:"—",sub:"Free → Paid",color:"#FF6B6B"}].map(s => (
+                  <div key={s.label} style={{ background:s.color+"07", border:`1px solid ${s.color}16`, borderRadius:13, padding:"16px" }}>
+                    <div style={{ fontSize:9, color:"#4A7FA5", letterSpacing:2, marginBottom:7 }}>{s.label.toUpperCase()}</div>
+                    <div style={{ fontSize:26, fontWeight:"bold", color:s.color, marginBottom:3 }}>{s.value}</div>
+                    <div style={{ fontSize:10, color:"#4A6080" }}>{s.sub}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background:"rgba(255,255,255,0.02)", border:"1px solid rgba(99,179,237,0.06)", borderRadius:13, padding:"24px", textAlign:"center", color:"#4A7FA5" }}>
+                <div style={{ fontSize:30, marginBottom:10 }}>📊</div>
+                Connect Stripe + Google Analytics API keys to see real-time revenue data here.
+              </div>
+            </div>
+          )}
+
+          {/* ── API KEYS ── */}
+          {tab === "apikeys" && (
+            <div>
+              <div style={{ fontSize:19, fontWeight:"bold", color:"#fff", marginBottom:4 }}>API Keys Setup</div>
+              <div style={{ fontSize:11, color:"#4A6080", marginBottom:20 }}>Every key needed for the full pipeline. Higgsfield is Priority 2 — get it at launch.</div>
+              {[
+                { priority:"Priority 1 — Get These First", color:"#FF4757", keys:[
+                  {name:"ANTHROPIC_API_KEY",where:"console.anthropic.com",cost:"~$20/mo",use:"Claude brain — builds apps, writes scripts, runs overseer"},
+                  {name:"STRIPE_SECRET_KEY",where:"dashboard.stripe.com → Developers → API Keys",cost:"Free (2.9% per charge)",use:"$5/month subscriptions on every app"},
+                  {name:"GITHUB_TOKEN",where:"github.com → Settings → Developer Settings → Tokens",cost:"Free",use:"Stores all app code, triggers deploys"},
+                  {name:"VERCEL_TOKEN",where:"vercel.com → Account Settings → Tokens",cost:"Free tier",use:"Deploys all apps with custom domains"},
+                ]},
+                { priority:"Priority 2 — Get at Launch", color:"#FF9F43", keys:[
+                  {name:"HIGGSFIELD_API_KEY",where:"higgsfield.ai → Settings → API",cost:"~$12–29/mo",use:"🎬 AI spokesperson video generation for all 32 apps"},
+                  {name:"BUFFER_ACCESS_TOKEN",where:"buffer.com → Developers → Create App",cost:"Free / $6/mo",use:"Schedule approved TikTok + X posts"},
+                  {name:"MAILCHIMP_API_KEY",where:"mailchimp.com → Account → Extras → API Keys",cost:"Free up to 500 contacts",use:"5-email onboarding sequences"},
+                  {name:"TWITTER_API_KEY",where:"developer.twitter.com → Developer Portal",cost:"Free basic",use:"X/Twitter posting via Buffer"},
+                  {name:"TIKTOK_CLIENT_KEY",where:"developers.tiktok.com → Create App",cost:"Free",use:"TikTok scheduling via Buffer"},
+                ]},
+                { priority:"Priority 3 — Get When Scaling", color:"#00D68F", keys:[
+                  {name:"REDDIT_CLIENT_ID",where:"reddit.com/prefs/apps",cost:"Free",use:"Research pipeline — scan subreddits for ideas"},
+                  {name:"PERPLEXITY_API_KEY",where:"perplexity.ai → Settings → API",cost:"~$5/mo",use:"Real-time web research for app ideas"},
+                  {name:"CANVA_API_KEY",where:"canva.com/developers",cost:"Free tier",use:"Auto-generate app store screenshots + ad images"},
+                  {name:"NAMECHEAP_API_KEY",where:"namecheap.com → Profile → Tools → API Access",cost:"Free",use:"Auto-check domain availability"},
+                  {name:"GOOGLE_ANALYTICS_ID",where:"analytics.google.com → Create Property",cost:"Free",use:"Track traffic across all apps"},
+                ]},
+              ].map(section => (
+                <div key={section.priority} style={{ marginBottom:22 }}>
+                  <div style={{ fontSize:10, color:section.color, letterSpacing:2, fontWeight:"bold", marginBottom:10 }}>{section.priority.toUpperCase()}</div>
+                  <div style={{ display:"flex", flexDirection:"column", gap:7 }}>
+                    {section.keys.map(key => (
+                      <div key={key.name} style={{ background:"rgba(255,255,255,0.02)", border:"1px solid rgba(99,179,237,0.06)", borderRadius:11, padding:"12px 16px", display:"grid", gridTemplateColumns:"1fr 2fr auto", gap:14, alignItems:"center" }}>
+                        <div>
+                          <div style={{ fontFamily:"Courier New,monospace", fontSize:10, color:section.color, fontWeight:"bold", marginBottom:3 }}>{key.name}</div>
+                          <div style={{ fontSize:10, color:"#4A6080" }}>{key.cost}</div>
+                        </div>
+                        <div>
+                          <div style={{ fontSize:11, color:"#8BA8C4", marginBottom:2 }}>{key.use}</div>
+                          <div style={{ fontSize:10, color:"#4A7FA5" }}>→ {key.where}</div>
+                        </div>
+                        <div style={{ background:"#4A7FA518", color:"#4A7FA5", border:"1px solid #4A7FA528", borderRadius:99, fontSize:9, padding:"2px 9px", whiteSpace:"nowrap" }}>NOT SET</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+        @keyframes popIn{from{opacity:0;transform:scale(0.93)}to{opacity:1;transform:scale(1)}}
+        *{box-sizing:border-box}
+        ::-webkit-scrollbar{width:5px;height:5px}
+        ::-webkit-scrollbar-track{background:#06101C}
+        ::-webkit-scrollbar-thumb{background:#4A7FA5;border-radius:3px}
+        input::placeholder,textarea::placeholder{color:#4A7FA5}
+        input:focus,textarea:focus{border-color:#2A5080!important}
+      `}</style>
+    </div>
+  );
+}
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<CommandCenter />);
+  </script>
+</body>
 </html>
